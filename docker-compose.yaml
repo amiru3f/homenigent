@@ -35,6 +35,9 @@ services:
       # Home Assistant deployment, set this in .env to prevent first-visitor
       # account claiming.
       OMNIGENT_ACCOUNTS_INIT_ADMIN_PASSWORD: ${OMNIGENT_ACCOUNTS_INIT_ADMIN_PASSWORD:-}
+      # Required when the server resolves the custom agent specification.
+      # The value comes only from the ignored .env file.
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?Set OPENROUTER_API_KEY in .env}
       OMNIGENT_BUILTIN_AGENT_DIRS: /agents/family-chat.yaml
       # Only expose the purpose-built family chat agent.
       # A whitespace-only value is intentionally "set but empty" after
