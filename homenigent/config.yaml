@@ -1,12 +1,16 @@
 name: Homenigent
 slug: homenigent
-version: "0.2.0"
+version: "0.2.1"
 description: Shared household Omnigent family chat, protected by Home Assistant.
 arch: [amd64, aarch64]
 startup: services
 boot: auto
 ingress: true
 ingress_port: 8000
+ports:
+  8000/tcp: 8000
+ports_description:
+  8000/tcp: Homenigent Web UI (private LAN)
 map: [data:rw]
 options: {openrouter_api_key: ""}
 schema: {openrouter_api_key: password}
