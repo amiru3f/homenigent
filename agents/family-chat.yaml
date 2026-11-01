@@ -5,7 +5,9 @@ description: Private household chat agent using OpenRouter through the OpenAI Ag
 # conversation/session layer; the SDK is the small execution adapter.
 executor:
   harness: openai-agents
-  model: openai/gpt-oss-120b:free
+  # OpenRouter chooses an available free model, avoiding hard-coded free-tier
+  # slugs that may be withdrawn.
+  model: openrouter/free
   auth:
     type: api_key
     api_key: ${OPENROUTER_API_KEY}
