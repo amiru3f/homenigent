@@ -1,0 +1,29 @@
+name: family-chat
+description: Private household chat agent using OpenRouter through the OpenAI Agents SDK.
+
+# This avoids Claude Code, Codex, and other vendor CLIs. Omnigent keeps the
+# conversation/session layer; the SDK is the small execution adapter.
+executor:
+  harness: openai-agents
+  model: openai/gpt-oss-120b:free
+  auth:
+    type: api_key
+    api_key: ${OPENROUTER_API_KEY}
+    base_url: https://openrouter.ai/api/v1
+
+prompt: |
+  You are the family's private household assistant. Be warm, direct, and
+  practical. Treat every user as a family member. Do not claim access to home
+  devices, calendars, messages, or private records unless an explicitly
+  configured tool is available in this session. For safety-critical home,
+  medical, or legal matters, explain limitations and recommend appropriate
+  professional help.
+
+# No shell, filesystem, browser, or Home Assistant tools in the first version.
+# Those are deliberately added later through reviewed, scoped integrations.
+tool_groups:
+  browser: false
+  scheduled_tasks: false
+  comments: false
+  policies: false
+  agent_discovery: false

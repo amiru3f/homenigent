@@ -1,0 +1,49 @@
+name: homenigent
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: omnigent
+      POSTGRES_USER: omnigent
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/bootstrap.sh first}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U omnigent -d omnigent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  omnigent:
+    image: ${OMNIGENT_IMAGE}:${OMNIGENT_IMAGE_TAG}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://omnigent:${POSTGRES_PASSWORD}@postgres:5432/omnigent
+      ARTIFACT_DIR: /data/artifacts
+      HOST: 0.0.0.0
+      PORT: "8000"
+      OMNIGENT_AUTH_ENABLED: "1"
+      OMNIGENT_AUTH_PROVIDER: accounts
+      OMNIGENT_ACCOUNTS_COOKIE_SECRET: ${OMNIGENT_ACCOUNTS_COOKIE_SECRET:?Run scripts/bootstrap.sh first}
+      OMNIGENT_ACCOUNTS_BASE_URL: ${OMNIGENT_ACCOUNTS_BASE_URL}
+      # Leave blank for the local first-run Create-admin page. Before the
+      # Home Assistant deployment, set this in .env to prevent first-visitor
+      # account claiming.
+      OMNIGENT_ACCOUNTS_INIT_ADMIN_PASSWORD: ${OMNIGENT_ACCOUNTS_INIT_ADMIN_PASSWORD:-}
+      OMNIGENT_BUILTIN_AGENT_DIRS: /agents/family-chat.yaml
+      # Only expose the purpose-built family chat agent.
+      OMNIGENT_SEEDED_AGENTS: ""
+    volumes:
+      - artifact-data:/data
+      - ./agents:/agents:ro
+    ports:
+      - "${OMNIGENT_PORT:-8000}:8000"
+
+volumes:
+  postgres-data:
+  artifact-data:
