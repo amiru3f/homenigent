@@ -16,10 +16,14 @@ until python -c "from urllib.request import urlopen; urlopen('http://127.0.0.1:8
   sleep 2
 done
 
-# The account and password exist only in Home Assistant's protected add-on
-# options. The login token is persisted under /data/host for later restarts.
-printf 'admin\n%s\n' "$OMNIGENT_ACCOUNTS_INIT_ADMIN_PASSWORD" | omni login http://127.0.0.1:8000
-OMNIGENT_RUNNER_ENV_PASSTHROUGH=OPENROUTER_API_KEY \
-  omni host --server http://127.0.0.1:8000 --background --no-open --non-interactive
+# `omni login` requires a real interactive terminal. After one manual
+# enrollment it stores a JWT here; later add-on restarts reuse it and start the
+# host automatically. Never attempt to pipe a password into getpass.
+if [ -f /data/host/.omnigent/auth_tokens.json ]; then
+  OMNIGENT_RUNNER_ENV_PASSTHROUGH=OPENROUTER_API_KEY \
+    omni host --server http://127.0.0.1:8000 --background --no-open --non-interactive
+else
+  echo "Host not enrolled yet; server is ready. Enroll once from an interactive add-on shell."
+fi
 
 wait "$server_pid"
