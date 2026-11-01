@@ -10,6 +10,8 @@ set_value() {
   if grep -q "^${key}=$" .env; then
     sed -i.bak "s|^${key}=$|${key}=${value}|" .env
     rm .env.bak
+  elif ! grep -q "^${key}=" .env; then
+    printf '%s=%s\n' "$key" "$value" >> .env
   fi
 }
 
