@@ -37,7 +37,9 @@ services:
       OMNIGENT_ACCOUNTS_INIT_ADMIN_PASSWORD: ${OMNIGENT_ACCOUNTS_INIT_ADMIN_PASSWORD:-}
       OMNIGENT_BUILTIN_AGENT_DIRS: /agents/family-chat.yaml
       # Only expose the purpose-built family chat agent.
-      OMNIGENT_SEEDED_AGENTS: ""
+      # A whitespace-only value is intentionally "set but empty" after
+      # Omnigent parses it, which suppresses the packaged harness choices.
+      OMNIGENT_SEEDED_AGENTS: " "
     volumes:
       - artifact-data:/data
       - ./agents:/agents:ro
