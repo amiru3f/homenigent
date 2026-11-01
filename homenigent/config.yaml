@@ -1,6 +1,6 @@
 name: Homenigent
 slug: homenigent
-version: "0.2.1"
+version: "0.2.2"
 description: Shared household Omnigent family chat, protected by Home Assistant.
 arch: [amd64, aarch64]
 startup: services
