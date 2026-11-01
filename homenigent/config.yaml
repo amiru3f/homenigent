@@ -1,0 +1,12 @@
+name: Homenigent
+slug: homenigent
+version: "0.1.1"
+description: Private Omnigent family-chat server.
+arch: [amd64, aarch64]
+startup: services
+boot: auto
+ingress: true
+ingress_port: 8000
+map: [data:rw]
+options: {openrouter_api_key: "", accounts_cookie_secret: "", init_admin_password: ""}
+schema: {openrouter_api_key: password, accounts_cookie_secret: password, init_admin_password: password?}

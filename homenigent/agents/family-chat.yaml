@@ -1,0 +1,8 @@
+id: family-chat
+name: Family Chat
+harness: openai-agents
+model: openrouter/free
+auth:
+  type: api_key
+  api_key: ${OPENROUTER_API_KEY}
+  base_url: https://openrouter.ai/api/v1
